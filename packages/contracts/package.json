@@ -1,0 +1,18 @@
+{
+  "name": "@skullbones/contracts",
+  "author": ["Norswap", "SassyCapybara"],
+  "license": "BSD-3-Clause-Clear",
+  "version": "1.0.0",
+  "files": [
+    "*.sol"
+  ],
+  "devDependencies": {
+    "prettier": "^2.7.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.24",
+    "solhint": "^3.3.7",
+    "solhint-plugin-prettier": "^0.0.5"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3"
+  }
+}
