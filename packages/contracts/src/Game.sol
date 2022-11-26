@@ -1,6 +1,6 @@
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/token/ERC721/ERC721.sol";
+import "openzeppelin/token/ERC721/ERC721.sol";
 import {Card, CardType} from "./CardType.sol";
 import "./Player.sol";
 import "forge-std/console2.sol";
