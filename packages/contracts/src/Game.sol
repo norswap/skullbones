@@ -16,8 +16,8 @@ contract Game {
     PlayerSetup[] players;
 
     constructor(Player a, Player b) {
-        createPlayerSetup(players, a);
-        createPlayerSetup(players, b);
+        createPlayerSetup(a);
+        createPlayerSetup(b);
     }
 
     function createPlayerSetup(Player player) private returns(uint256) {
