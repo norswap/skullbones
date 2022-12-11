@@ -10,11 +10,16 @@ contract Game {
 
     struct PlayerSetup {
         Player player;
+        // index of one of player's decks (playlists)
         uint256 deck;
+        // what's on the table, player can play only cards in his hand
         Card[] hand;
     }
 
+    // in order of play turn
     PlayerSetup[] players;
+    // index in players - signifies whose turn it is
+    uint8 turn;
 
     constructor(Player a, Player b) {
         createPlayerSetup(a);

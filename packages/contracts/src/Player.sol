@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "./CardType.sol";
 
 contract Player {
+    // like playlists - owner is kept in CardType
     Card[][] public decks;
 
     constructor () {

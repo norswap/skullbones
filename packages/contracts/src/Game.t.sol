@@ -11,4 +11,9 @@ contract GameTest is Test {
         Player b = new Player();
         new Game(a, b);
     }
+
+    function testCardMinting() public {
+        CardType cardType = new CardType("Test CardType");
+        cardType.mint(msg.sender);
+    }
 }
