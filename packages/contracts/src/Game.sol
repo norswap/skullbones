@@ -8,6 +8,8 @@ import "forge-std/console2.sol";
 
 contract Game {
 
+    error SamePlayer();
+
     struct PlayerSetup {
         Player player;
         // index of one of player's decks (playlists)
@@ -19,9 +21,12 @@ contract Game {
     // in order of play turn
     PlayerSetup[] players;
     // index in players - signifies whose turn it is
-    uint8 turn;
+    uint8 turn = 0;
 
     constructor(Player a, Player b) {
+        //require(a.playerAddress() != b.playerAddress(), "Players must have unique addresses");
+        if (a.playerAddress() == b.playerAddress())
+            revert SamePlayer();
         createPlayerSetup(a);
         createPlayerSetup(b);
     }
@@ -32,5 +37,14 @@ contract Game {
         players[id].player = player;
         players[id].deck = 0;
         return id;
+    }
+
+    function nextTurn() public {
+        turn = uint8((turn + 1) % players.length);
+    }
+
+    function playCard(CardType cardType, uint tokenId) external {
+        require (msg.sender == players[turn].player.playerAddress() && msg.sender == cardType.ownerOf(tokenId));
+
     }
 }

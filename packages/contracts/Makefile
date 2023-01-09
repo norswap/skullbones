@@ -9,7 +9,7 @@ build:
 .PHONY: build
 
 test:
-	forge test
+	forge test -vvvv
 .PHONY: test
 
 test-gas:

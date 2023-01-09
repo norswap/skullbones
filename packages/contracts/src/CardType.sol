@@ -16,7 +16,8 @@ contract CardType is ERC721, Ownable {
 
     constructor (string memory name_) ERC721(name_, name_) {}
 
-    function mint(address to) external onlyOwner {
+    function mint(address to) external onlyOwner returns (uint256) {
         _safeMint(to, nextId++);
+        return nextId - 1;
     }
 }

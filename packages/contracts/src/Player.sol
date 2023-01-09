@@ -3,17 +3,30 @@ pragma solidity ^0.8.0;
 
 import "./CardType.sol";
 
+struct Deck {
+    string name;
+    string description;
+    Card[] cards;
+}
+
 contract Player {
     // like playlists - owner is kept in CardType
-    Card[][] public decks;
+    Deck[] public decks;
+    address public playerAddress;
 
-    constructor () {
-        decks.push();
+    constructor (address _playerAddress) {
+        playerAddress = _playerAddress;
+    }
 
-        CardType biguGob = new CardType("Small Goblin");
-        CardType smolGob = new CardType("Big Goblin");
+    function createDeck(string calldata name, string calldata description) public returns (uint) {
+        Deck storage deck = decks.push();
+        deck.name = name;
+        deck.description = description;
+        return decks.length - 1;
+    }
 
-        decks[0].push(Card(biguGob, 1));
-        decks[0].push(Card(smolGob, 1));
+    function addCardToDeck(uint deckId, CardType cardType, uint cardId) public {
+        require(cardType.ownerOf(cardId) == playerAddress);
+        decks[deckId].cards.push(Card(cardType, cardId));
     }
 }
