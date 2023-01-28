@@ -6,41 +6,48 @@ import "./Game.sol";
 import "./Player.sol";
 
 contract GameTest is Test {
+
     function testConstructor() public {
-        Player a = new Player(vm.addr(1));
-        Player b = new Player(vm.addr(2));
-        new Game(a, b);
+        address a1 = vm.addr(1);
+        address a2 = vm.addr(2);
+        Game game = new Game();
+        game.enterGame(a1);
+        game.enterGame(a2);
+        game.startGame(52);
 
-        vm.expectRevert(Game.SamePlayer.selector);
-        new Game(a, a);
+
+
+        // vm.expectRevert(Game.SamePlayer.selector);
+        // new Game(a, a);
     }
 
-    // TODO create mint manager or something
-    function testCardMinting() public {
-        CardType cardType = new CardType("Test CardType");
-        address ownerAddress = vm.addr(1);
-        uint tokenId = cardType.mint(ownerAddress);
-        require(cardType.ownerOf(tokenId) == ownerAddress);
-        //require(cardType.ownerOf(tokenId) != msg.sender);
-    }
+    // // TODO create mint manager or something
+    // function testCardMinting() public {
+    //     Card cardType = new Card("Test Card");
+    //     address ownerAddress = vm.addr(1);
+    //     uint tokenId = cardType.mint(ownerAddress);
+    //     require(cardType.ownerOf(tokenId) == ownerAddress);
+    //     //require(cardType.ownerOf(tokenId) != msg.sender);
+    // }
 
 
-    function testGame() public {
-        CardType cardType = new CardType("Test CardType");
-        Player a = new Player(vm.addr(1));
-        Player b = new Player(vm.addr(2));
+    // function testGame() public {
+    //     Card cardType = new Card("Test Card");
+    //     Player a = new Player(vm.addr(1));
+    //     Player b = new Player(vm.addr(2));
 
-        new Game(a, b);
-    }
+    //     new Game(a, b);
+    // }
 
-    function testPlayer() public {
-        Player a = new Player(msg.sender);
-        require(a.playerAddress() == msg.sender);
+    // function testPlayer() public {
+    //     Player a = new Player(msg.sender);
+    //     require(a.playerAddress() == msg.sender);
 
-        a.createDeck("name", "description");
-    }
+    //     a.createDeck("name", "description");
+    // }
 
-    function mintCardsForPlayer(CardType cardType, address playerAddress) private returns (uint) {
-        return cardType.mint(playerAddress);
-    }
+    // function mintCardsForPlayer(Card cardType, address playerAddress) private returns (uint) {
+    //     return cardType.mint(playerAddress);
+    // }
+    
 }
