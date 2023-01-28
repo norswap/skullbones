@@ -64,24 +64,27 @@ contract Game {
 
     }
 
-function generateDeck(uint8 deckSize) private {
-    uint8[52] memory numberArr;
+    function generateDeck(uint8 deckSize) private {
+        uint8[52] memory numberArr;
 
-    for (uint8 i = 0; i < deckSize; i++) {
-        numberArr[i] = i;
-    }
+        // generate an array of 0, 1, 2..
+        for (uint8 i = 0; i < deckSize; i++) {
+            numberArr[i] = i;
+        }
 
-    for (uint8 i = 0; i < deckSize; i++) {
-        uint n = i + uint(keccak256(abi.encodePacked(block.timestamp))) % (deckSize - i);
-        uint8 temp = numberArr[n];
-        numberArr[n] = numberArr[i];
-        numberArr[i] = temp;
-    }
+        // shuffle the array
+        for (uint8 i = 0; i < deckSize; i++) {
+            uint n = i + uint(keccak256(abi.encodePacked(block.timestamp))) % (deckSize - i);
+            uint8 temp = numberArr[n];
+            numberArr[n] = numberArr[i];
+            numberArr[i] = temp;
+        }
 
-    for (uint8 i = 0; i < deckSize; i++) {
-        deck.push(bytes1(numberArr[i]));
+        // turn into bytes
+        for (uint8 i = 0; i < deckSize; i++) {
+            deck.push(bytes1(numberArr[i]));
+        }
     }
-}
 
     function nextTurn() public {
         turn = uint8((turn + 1) % players.length);
@@ -89,6 +92,5 @@ function generateDeck(uint8 deckSize) private {
 
     // function playCard(Card cardType, uint tokenId) external {
     //     require (msg.sender == players[turn].player.playerAddress() && msg.sender == cardType.ownerOf(tokenId));
-
     // }
 }
