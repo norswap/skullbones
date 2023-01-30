@@ -15,15 +15,34 @@ struct Card {
     CardValue value;
 }
 
-function bytesToCard(uint8 deckSize, bytes1 id) pure returns (Card memory) {
+function bytesToCard(uint deckSize, bytes1 id) pure returns (Card memory) {
     Card memory card;
     card.id = id;
 
-    uint8 cardNumber = uint8(id);
-    uint8 cardsPerSuit = deckSize / 4;
+    uint cardNumber = uint8(id);
+    uint cardsPerSuit = deckSize / 4;
 
-    card.suit = CardSuit(uint8(cardNumber / cardsPerSuit));
-    card.value = CardValue(uint8(12 - (cardNumber % cardsPerSuit)));
+    card.suit = CardSuit(uint(cardNumber / cardsPerSuit));
+    card.value = CardValue(uint(12 - (cardNumber % cardsPerSuit)));
+
+    //require(cardToBytes(deckSize, card.suit, card.value) == id);
 
     return card;
+}
+
+function getCardSuit(uint deckSize, bytes1 id) pure returns (CardSuit) {
+    return CardSuit(uint(uint8(id) * 4 / deckSize));
+}
+
+function getCardValue(uint deckSize, bytes1 id) pure returns (CardValue) {
+    return CardValue(uint(12 - (uint8(id) % (deckSize / 4))));
+}
+
+function cardToBytes(uint deckSize, CardSuit suit, CardValue value) pure returns (bytes1) {
+    uint cardNumber = (uint(suit) * deckSize / 4) + 12 - uint(value);
+    return bytes1(uint8(cardNumber));
+}
+
+function cardValueToCard(uint deckSize, CardSuit suit, CardValue value) pure returns (Card memory) {
+    return Card(cardToBytes(deckSize, suit, value), suit, value);
 }
