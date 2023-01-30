@@ -18,7 +18,8 @@ contract Game {
     uint defenderIndex;
     uint deckSize;
     bytes deck;
-    bytes onTable;
+    bytes attackCards; // those that the defender has to beat
+    bytes onTable; // beaten but still on table
     CardSuit trump;
 
     constructor() {
@@ -107,36 +108,30 @@ contract Game {
         require(state == GameState.FIRST_ATTACK, "Invalid game state. Must be FIRST_ATTACK");
         address attackerAddress = players[getAttackerIndex()];
         require (msg.sender == attackerAddress, "Sender address does not match attacker's address.");
-        require(cards.length > 0 && cards.length <= 4, "Invalid number of cards.");
+        require(cards.length > 0 && cards.length <= 4, "Invalid number of cards, must be between 1 and 4.");
 
         address defenderAddress = players[defenderIndex];
         require(cards.length <= hands[defenderAddress].length, "More cards than the defender has.");
 
-        bool sameSuit = true;
-        bool sameValue = true;
-
         bytes memory attackerHand = hands[attackerAddress];
+
+        CardValue cardValue = getCardValue(deckSize, cards[0]);
 
         for (uint i = 0; i < cards.length; i++) {
             require(contains(attackerHand, cards[i]), "Card does not belong to attacker.");
-            if (cards.length > 1) {
-                Card memory cardI = bytesToCard(deckSize, cards[i]);
-                for (uint j = i + 1; j < cards.length; j++) {
-                    require(cards[j] != cards[i], "Duplicate cards.");
-                    Card memory cardJ = bytesToCard(deckSize, cards[j]);
-                    if (cardI.suit != cardJ.suit) sameSuit = false;
-                    if (cardI.value != cardJ.value) sameValue = false;
-                    require(sameSuit || sameValue, "Combination of cards is not allowed.");
-                }
+            for (uint j = i + 1; j < cards.length; j++) {
+                require(cards[j] != cards[i], "Duplicate cards.");
             }
+            require(getCardValue(deckSize, cards[i]) == cardValue, "Combination of cards is not allowed. All cards in first attack must have the same value.");
         }
-
-        onTable = cards;
+        
+        attackCards = cards;
         hands[attackerAddress] = "";
 
         for (uint i = 0; i < attackerHand.length; i++) {
             if (!contains(cards, attackerHand[i])) hands[attackerAddress].push(attackerHand[i]);
         }
+        // TODO if out of cards - win
 
         state = GameState.DEFEND;
     }
